@@ -1,0 +1,69 @@
+{
+  "name": "tree-sitter-k9",
+  "version": "0.1.0",
+  "description": "Tree-sitter grammar for the K9 contractile format (Kennel/Yard/Hunt levels)",
+  "license": "PMPL-1.0-or-later",
+  "author": "Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hyperpolymath/tree-sitter-k9.git"
+  },
+  "homepage": "https://github.com/hyperpolymath/tree-sitter-k9",
+  "bugs": {
+    "url": "https://github.com/hyperpolymath/tree-sitter-k9/issues"
+  },
+  "keywords": [
+    "tree-sitter",
+    "parser",
+    "k9",
+    "syntax-highlighting",
+    "contractiles",
+    "nickel"
+  ],
+  "main": "bindings/node",
+  "types": "bindings/node/index.d.ts",
+  "files": [
+    "grammar.js",
+    "binding.gyp",
+    "prebuilds/**",
+    "bindings/node/*",
+    "queries/*",
+    "src/**",
+    "*.wasm"
+  ],
+  "dependencies": {
+    "node-addon-api": "^8.3.0",
+    "node-gyp-build": "^4.8.4"
+  },
+  "devDependencies": {
+    "prebuildify": "^6.0.1",
+    "tree-sitter-cli": "^0.25.10"
+  },
+  "peerDependencies": {
+    "tree-sitter": "^0.22.4"
+  },
+  "peerDependenciesMeta": {
+    "tree-sitter": {
+      "optional": true
+    }
+  },
+  "scripts": {
+    "generate": "tree-sitter generate",
+    "build": "tree-sitter generate && node-gyp build",
+    "test": "tree-sitter test",
+    "parse": "tree-sitter parse",
+    "install": "node-gyp-build"
+  },
+  "tree-sitter": [
+    {
+      "scope": "source.k9",
+      "injection-regex": "^k9$",
+      "file-types": [
+        "k9",
+        "k9.ncl"
+      ],
+      "highlights": "queries/highlights.scm",
+      "locals": "queries/locals.scm"
+    }
+  ]
+}

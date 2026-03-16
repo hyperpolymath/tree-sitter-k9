@@ -1,0 +1,28 @@
+================================================================================
+Array literal with strings
+================================================================================
+
+K9!
+{
+  keywords = [
+    "rhodium-standard",
+    "rsr",
+  ],
+}
+
+--------------------------------------------------------------------------------
+
+(document
+  (magic_number)
+  (record_literal
+    (record_body
+      (record_field
+        (field_name
+          (identifier))
+        (array_literal
+          (string_literal
+            (string_content
+              (string_fragment)))
+          (string_literal
+            (string_content
+              (string_fragment))))))))

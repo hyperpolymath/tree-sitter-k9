@@ -1,0 +1,21 @@
+[package]
+name = "tree-sitter-k9"
+version = "0.1.0"
+description = "Tree-sitter grammar for the K9 contractile format (Kennel/Yard/Hunt levels)"
+license = "PMPL-1.0-or-later"
+authors = ["Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>"]
+repository = "https://github.com/hyperpolymath/tree-sitter-k9"
+edition = "2021"
+keywords = ["tree-sitter", "parser", "k9", "syntax-highlighting"]
+categories = ["parsing", "text-editors"]
+
+build = "build.rs"
+
+[lib]
+path = "lib.rs"
+
+[dependencies]
+tree-sitter = ">=0.23"
+
+[build-dependencies]
+cc = "1.2"

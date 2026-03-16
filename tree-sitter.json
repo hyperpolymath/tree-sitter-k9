@@ -1,0 +1,33 @@
+{
+  "grammars": [
+    {
+      "name": "k9",
+      "camelcase": "K9",
+      "scope": "source.k9",
+      "injection-regex": "^k9$",
+      "file-types": ["k9", "k9.ncl"],
+      "highlights": "queries/highlights.scm",
+      "locals": "queries/locals.scm",
+      "first-line-regex": "^K9!"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "PMPL-1.0-or-later",
+    "description": "Tree-sitter grammar for the K9 contractile format",
+    "authors": [
+      {
+        "name": "Jonathan D.A. Jewell",
+        "email": "j.d.a.jewell@open.ac.uk"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/hyperpolymath/tree-sitter-k9"
+    }
+  },
+  "bindings": {
+    "c": true,
+    "node": true,
+    "rust": true
+  }
+}

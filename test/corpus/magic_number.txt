@@ -1,0 +1,24 @@
+================================================================================
+K9 magic number with Nickel record
+================================================================================
+
+K9!
+# SPDX-License-Identifier: PMPL-1.0-or-later
+{
+  name = "test",
+}
+
+--------------------------------------------------------------------------------
+
+(document
+  (magic_number)
+  (header_block
+    (header_comment))
+  (record_literal
+    (record_body
+      (record_field
+        (field_name
+          (identifier))
+        (string_literal
+          (string_content
+            (string_fragment)))))))

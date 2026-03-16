@@ -1,0 +1,45 @@
+================================================================================
+Field with type contract and default
+================================================================================
+
+K9!
+{
+  port | Num = 8080,
+}
+
+--------------------------------------------------------------------------------
+
+(document
+  (magic_number)
+  (record_literal
+    (record_body
+      (record_field
+        (field_name
+          (identifier))
+        (type_contract
+          (type_expression
+            (builtin_type)))
+        (number_literal)))))
+
+================================================================================
+Field with Bool type contract
+================================================================================
+
+K9!
+{
+  dry_run | Bool = false,
+}
+
+--------------------------------------------------------------------------------
+
+(document
+  (magic_number)
+  (record_literal
+    (record_body
+      (record_field
+        (field_name
+          (identifier))
+        (type_contract
+          (type_expression
+            (builtin_type)))
+        (boolean_literal)))))

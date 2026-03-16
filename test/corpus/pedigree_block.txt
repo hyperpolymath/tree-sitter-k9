@@ -1,0 +1,45 @@
+================================================================================
+Nested records with trust level
+================================================================================
+
+K9!
+{
+  pedigree = {
+    schema_version = "1.0.0",
+    security = {
+      leash = 'Kennel,
+      allow_network = false,
+    },
+  },
+}
+
+--------------------------------------------------------------------------------
+
+(document
+  (magic_number)
+  (record_literal
+    (record_body
+      (record_field
+        (field_name
+          (identifier))
+        (record_literal
+          (record_body
+            (record_field
+              (field_name
+                (identifier))
+              (string_literal
+                (string_content
+                  (string_fragment))))
+            (record_field
+              (field_name
+                (identifier))
+              (record_literal
+                (record_body
+                  (record_field
+                    (field_name
+                      (identifier))
+                    (trust_level))
+                  (record_field
+                    (field_name
+                      (identifier))
+                    (boolean_literal)))))))))))

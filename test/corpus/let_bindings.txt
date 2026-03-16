@@ -1,0 +1,28 @@
+================================================================================
+Let binding with import
+================================================================================
+
+K9!
+{
+  let base = import "base.ncl" in
+  name = "test",
+}
+
+--------------------------------------------------------------------------------
+
+(document
+  (magic_number)
+  (record_literal
+    (record_body
+      (let_binding
+        (identifier)
+        (import_expression
+          (string_literal
+            (string_content
+              (string_fragment)))))
+      (record_field
+        (field_name
+          (identifier))
+        (string_literal
+          (string_content
+            (string_fragment)))))))
