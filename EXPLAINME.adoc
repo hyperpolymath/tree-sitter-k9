@@ -1,23 +1,169 @@
 // SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 = tree-sitter-k9 — Show Me The Receipts
 :toc:
+:toclevels: 3
 :icons: font
+:author: Jonathan D.A. Jewell
+:email: j.d.a.jewell@open.ac.uk
 
-The README makes claims. This file backs them up.
+The grammar covers two distinct K9 syntax variants. This file backs up what
+each variant looks like, where the critical grammar rules live, how the
+parser is generated and tested, and how tree-sitter-k9 integrates with the
+rest of the hyperpolymath account.
+
+== What K9 Is
+
+K9 is the hyperpolymath configuration and policy format with two syntax levels.
+The Kennel level (`.k9`) is a YAML-like format with `key: value` pairs and
+`pedigree` blocks declaring name, version, description, and security level.
+The Yard/Hunt level (`.k9.ncl`) is a Nickel-derived format with `let` bindings,
+type annotations, contracts, record literals, and `recipe` blocks — used for
+richer policy composition.
+Both variants share a mandatory `K9!` magic number on the first line and a
+trust-level enum (`'Kennel`, `'Yard`, `'Hunt`).
+Tree-sitter-k9 provides a generated C parser for both variants, enabling
+syntax-aware linting, highlighting, and machine-readable config validation
+throughout the account.
+
+== Claim 1: Dual-syntax grammar covering both K9 variants
 
 [quote, README]
 ____
-A hyperpolymath project.
+tree-sitter-k9 — Tree-sitter grammar for the K9 format. K9 has two syntax
+variants: Kennel level (.k9) and Yard/Hunt level (.k9.ncl).
 ____
+
+*How it works.*
+`grammar.js` defines the `document` rule as:
+`seq(magic_number, optional(header_block), choice(record_literal, kennel_body))`.
+The `record_literal` branch handles the Nickel-derived `.k9.ncl` syntax;
+`kennel_body` handles the YAML-like `.k9` syntax.
+A precedence table (`PREC`) resolves expression ambiguities in the Nickel
+branch: function application at `7`, multiplication at `5`, addition at `4`,
+comparison at `3`, logical and/or at `2`/`1`, and pipe at `0`.
+Trust levels (`'Kennel`, `'Yard`, `'Hunt`) are parsed as enum tags with the
+`trust_level` node type so tooling can gate operations based on the declared
+trust level.
+The `pedigree_block` node captures `name`, `version`, `description`, and
+`security_level` as named fields, making them addressable from query files
+without regex extraction.
+`src/parser.c`, `src/grammar.json`, and `src/node-types.json` are generated
+by `tree-sitter generate` from `grammar.js` — do not edit them directly.
+
+*Honest caveat.*
+The grammar handles the current K9 spec; the Nickel-derived branch covers the
+core expression language but may not yet handle all contract combinators
+(`|> Array.map`, complex merge operators) present in the upstream Nickel
+grammar — test coverage for advanced Nickel expressions should be consulted
+in `test/` before relying on parse accuracy for complex `.k9.ncl` files.
+
+== Claim 2: Editor integration with K9-specific highlight captures
+
+[quote, README]
+____
+Both variants share: Magic number K9! (first line), trust levels: kennel,
+yard, hunt, and pedigree blocks.
+____
+
+*How it works.*
+`queries/highlights.scm` maps K9-specific node types to capture names: the
+`magic_number` node maps to `@keyword.directive` so editors display `K9!` as
+a prominent directive keyword; `trust_level` maps to `@constant.builtin` to
+visually distinguish security assertions from ordinary values; `pedigree_block`
+keyword maps to `@keyword.type`; and `enum_tag` (the `'Kennel`/`'Yard`/`'Hunt`
+tokens) maps to `@constant`.
+`queries/locals.scm` provides scope captures for the Nickel `let`-binding
+branch, enabling jump-to-definition within `.k9.ncl` files in tree-sitter-aware
+editors.
+`deno.json` exports the parser for Deno-based K9 tooling:
+`import { parser } from "jsr:@hyperpolymath/tree-sitter-k9"`.
+
+*Honest caveat.*
+`queries/locals.scm` coverage for the YAML-like Kennel branch is minimal —
+pedigree field references are not yet tracked as definition sites.
+
+== Dogfooded Across The Account
+
+[cols="1,3", options="header"]
+|===
+| Tool / Repo | How tree-sitter-k9 is used
+
+| `validate-robot-config.k9.ncl` (robot-vacuum-cleaner)
+| K9-format Nickel robot config is syntax-checked and validated using this grammar
+
+| `k9-showcase`
+| Showcase repo exercising the grammar against a corpus of real K9 policy files
+
+| `k9_ex` / `k9_gleam`
+| Gleam-based K9 processing tools use this parser for structural queries
+
+| `hypatia`
+| Hypatia's K9 rule module uses the tree-sitter binding to check manifest trust levels
+
+| `standards`
+| The K9 language spec lives in `standards/`; this grammar is the reference implementation
+
+| `universal-language-server-plugin`
+| LSP plugin uses this grammar to provide hover, completion, and diagnostics for `.k9` and `.k9.ncl` files
+
+| `awesome-nickel`
+| Documents this grammar as the canonical K9 parsing tool in the Nickel ecosystem list
+|===
 
 == File Map
 
-[cols="1,2"]
+[cols="2,4", options="header"]
 |===
 | Path | What's There
 
-| `src/` | Source code
-| `test(s)/` | Test suite
+| `grammar.js`
+| Authoritative grammar: dual-syntax rules, `PREC` table, trust-level nodes, pedigree fields
+
+| `src/parser.c`
+| Generated C parser — do not edit; regenerate with `tree-sitter generate`
+
+| `src/grammar.json`
+| Serialised grammar used by tree-sitter CLI and binding generators
+
+| `src/node-types.json`
+| Node type manifest: named nodes, field names — consumed by binding generators
+
+| `queries/highlights.scm`
+| Highlight captures: `magic_number`, `trust_level`, `pedigree_block`, `enum_tag`, `let`/`in`/`if`/`fun` keywords
+
+| `queries/locals.scm`
+| Scope and reference captures for the Nickel `let`-binding branch
+
+| `bindings/`
+| Auto-generated language bindings: Node.js, Python, Rust
+
+| `binding.gyp`
+| Node.js native addon build descriptor
+
+| `deno.json`
+| Deno module manifest: exports the parser for Deno-based K9 tooling
+
+| `package.json`
+| npm-compatible descriptor for the tree-sitter CLI toolchain
+
+| `tree-sitter.json`
+| Tree-sitter CLI configuration: grammar name, highlights path, queries directory
+
+| `test/`
+| Tree-sitter corpus tests: `.k9` and `.k9.ncl` input/expected-parse pairs
+
+| `tests/`
+| Extended integration tests against real K9 files from the account
+
+| `TEST-NEEDS.md`
+| Known gaps: advanced Nickel contract combinators, full `merge` operator coverage
+
+| `Justfile`
+| Developer recipes: `generate`, `test`, `build-bindings`, `bench`
+
+| `flake.nix` / `guix.scm`
+| Reproducible build environments with `tree-sitter-cli` and C toolchain
 |===
 
 == Questions?
