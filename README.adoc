@@ -1,0 +1,140 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+= tree-sitter-k9
+:toc: preamble
+:icons: font
+:author: Jonathan D.A. Jewell
+:email: j.d.a.jewell@open.ac.uk
+
+*Tree-sitter grammar for the K9 configuration format — dual-syntax: Kennel and Yard/Hunt.*
+
+image:https://img.shields.io/badge/License-PMPL--1.0--or--later-blue.svg[License: PMPL-1.0-or-later]
+image:https://img.shields.io/badge/tree--sitter-grammar-blue.svg[Tree-sitter]
+image:https://img.shields.io/badge/format-K9-green.svg[K9]
+
+== What this is
+
+`tree-sitter-k9` provides a generated C parser for both K9 syntax variants:
+
+* *Kennel level* (`.k9`) — a YAML-like format with `key: value` pairs and
+  `pedigree` blocks
+* *Yard/Hunt level* (`.k9.ncl`) — a Nickel-derived format with `let` bindings,
+  type annotations, contracts, and `recipe` blocks
+
+Both variants share:
+
+* A mandatory `K9!` magic number on line 1
+* Trust levels: `'Kennel`, `'Yard`, `'Hunt`
+* A `pedigree` block (name, version, description, security level)
+
+== Quick start
+
+[source,bash]
+----
+# Regenerate the parser from grammar.js
+just generate
+
+# Run corpus tests
+just test
+
+# Benchmark parse speed
+just bench
+
+# Build language bindings
+just build-bindings
+----
+
+== Grammar structure
+
+The `grammar.js` `document` rule is:
+
+[source,javascript]
+----
+seq(
+  magic_number,
+  optional(header_block),
+  choice(record_literal, kennel_body)
+)
+----
+
+`record_literal` handles `.k9.ncl` (Nickel-derived); `kennel_body` handles
+`.k9` (YAML-like). A `PREC` table resolves expression ambiguities in the
+Nickel branch (function application: 7, multiplication: 5, …, pipe: 0).
+
+== Editor integration
+
+[cols="2,3", options="header"]
+|===
+| File | Purpose
+
+| `queries/highlights.scm`
+| K9-specific captures: `magic_number` → `@keyword.directive`,
+  `trust_level` → `@constant.builtin`, `enum_tag` → `@constant`,
+  `pedigree_block` → `@keyword.type`
+
+| `queries/locals.scm`
+| Scope captures for `let`-bindings in `.k9.ncl` (jump-to-definition)
+|===
+
+== Deno integration
+
+[source,javascript]
+----
+import { parser } from "jsr:@hyperpolymath/tree-sitter-k9";
+
+const tree = parser.parse(k9Source);
+// Access pedigree fields directly by name via named nodes
+----
+
+== File map
+
+[cols="2,3", options="header"]
+|===
+| Path | What it contains
+
+| `grammar.js`
+| Authoritative grammar: dual-syntax rules, `PREC` table, trust-level nodes
+
+| `src/parser.c`
+| Generated C parser (do not edit — regenerate with `just generate`)
+
+| `src/grammar.json`
+| Serialised grammar
+
+| `src/node-types.json`
+| Node type manifest
+
+| `queries/highlights.scm`
+| Highlight captures for both K9 variants
+
+| `queries/locals.scm`
+| Scope captures for `.k9.ncl` let-bindings
+
+| `bindings/`
+| Auto-generated: Node.js, Python, Rust
+
+| `test/`
+| Tree-sitter corpus tests for `.k9` and `.k9.ncl`
+
+| `tests/`
+| Extended integration tests against real K9 files
+|===
+
+== K9 ecosystem
+
+* https://github.com/hyperpolymath/k9-rs[k9-rs] — Rust reference implementation
+* https://github.com/hyperpolymath/k9_ex[k9_ex] — Elixir
+* https://github.com/hyperpolymath/k9_gleam[k9_gleam] — Gleam (BEAM + JS)
+* https://github.com/hyperpolymath/k9-showcase[k9-showcase] — examples + docs
+* https://github.com/hyperpolymath/format-registrations[format-registrations] — IANA / MIME registration
+
+See link:EXPLAINME.adoc[EXPLAINME.adoc] for implementation evidence and caveats.
+
+== License
+
+PMPL-1.0-or-later. See `LICENSE`.
+
+== Author
+
+Jonathan D.A. Jewell +
+j.d.a.jewell@open.ac.uk
