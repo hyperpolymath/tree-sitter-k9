@@ -2,6 +2,8 @@
 # Justfile for tree-sitter-k9
 
 # Default recipe — list available commands
+import? "contractile.just"
+
 default:
     @just --list
 
