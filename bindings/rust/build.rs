@@ -11,7 +11,7 @@ fn main() {
 
     let parser_path = src_dir.join("parser.c");
     c_config.file(&parser_path);
-    println!("cargo:rerun-if-changed={}", parser_path.to_str().unwrap());
+    println!("cargo:rerun-if-changed={}", parser_path.to_str().expect("TODO: handle error"));
 
     c_config.compile("tree-sitter-k9");
 }
