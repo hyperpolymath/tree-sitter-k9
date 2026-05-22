@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 // Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
 
 import { assertEquals, assert } from "https://deno.land/std@0.208.0/assert/mod.ts";
@@ -89,7 +89,7 @@ Deno.test("Grammar structure - corpus files have valid tree-sitter format", asyn
 Deno.test("Grammar structure - SPDX headers in grammar.js", async () => {
   const grammarContent = await Deno.readTextFile("./grammar.js");
   assert(
-    grammarContent.includes("SPDX-License-Identifier: PMPL-1.0-or-later"),
+    grammarContent.includes("SPDX-License-Identifier: MPL-2.0"),
     "grammar.js should have SPDX header"
   );
 });

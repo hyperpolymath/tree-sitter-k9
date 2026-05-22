@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 // SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 = tree-sitter-k9
 :toc: preamble
@@ -8,7 +8,7 @@
 
 *Tree-sitter grammar for the K9 configuration format — dual-syntax: Kennel and Yard/Hunt.*
 
-image:https://img.shields.io/badge/License-PMPL--1.0--or--later-blue.svg[License: PMPL-1.0-or-later]
+image:https://img.shields.io/badge/License-PMPL--1.0--or--later-blue.svg[License: MPL-2.0]
 image:https://img.shields.io/badge/tree--sitter-grammar-blue.svg[Tree-sitter]
 image:https://img.shields.io/badge/format-K9-green.svg[K9]
 
@@ -132,7 +132,7 @@ See link:EXPLAINME.adoc[EXPLAINME.adoc] for implementation evidence and caveats.
 
 == License
 
-PMPL-1.0-or-later. See `LICENSE`.
+MPL-2.0. See `LICENSE`.
 
 == Author
 
