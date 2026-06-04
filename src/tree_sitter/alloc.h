@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MPL-2.0
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 #ifndef TREE_SITTER_ALLOC_H_
 #define TREE_SITTER_ALLOC_H_
 
