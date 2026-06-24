@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MPL-2.0
+// SPDX-License-Identifier: CC-BY-SA-4.0
 // Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 // SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 = tree-sitter-k9
@@ -137,7 +137,7 @@ See link:EXPLAINME.adoc[EXPLAINME.adoc] for implementation evidence and caveats.
 
 This project is licensed under the Mozilla Public License, v. 2.0. See the `LICENSE` file for details.
 
-SPDX-License-Identifier: MPL-2.0
+SPDX-License-Identifier: CC-BY-SA-4.0
 
 == Author
 
