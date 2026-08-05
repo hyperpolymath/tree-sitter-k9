@@ -79,3 +79,4 @@ dependencies:
         commit: 'sha1-f205ea1c3313d32999d8d6a48b4f6530d4437b38'
         owner_id: 9919
         repo_id: 259445878
+    '.github/workflows/secret-scanner.yml': []
